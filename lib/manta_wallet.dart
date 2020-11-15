@@ -85,7 +85,6 @@ class MantaWallet {
           mqtt_client: mqtt_client,
           useWebSocket: useWebSocket,
           autoReconnect: autoReconnect);
-      inst.client.useAlternateWebSocketImplementation = false;
       return inst;
     }
     return null;
@@ -140,7 +139,6 @@ class MantaWallet {
     }
 
     try {
-      client.useWebSocket = useWebSocket;
       await client.connect();
     } catch (e) {
       logger.warning("Client exception - $e");
