@@ -23,6 +23,7 @@ const MQTT_DEFAULT_PORT = 1883;
 
 class MantaWallet {
   String session_id;
+  String confirmUrl;
   String host;
   int port;
   Map<String, String> topics;
@@ -35,14 +36,21 @@ class MantaWallet {
   bool useWebSocket = false;
   bool autoReconnect = false;
 
+  static String getUrlParam(String url, String param) {
+    RegExp exp = RegExp(r"[?&]" + param + r"=([^&]+).*$");
+    final matches = exp.allMatches(url);
+    return matches.isEmpty ? null : matches.first.group(1);
+  }
+
   static Match parseUrl(String url) {
-    RegExp exp = RegExp(r"^manta://((?:\w|\.)+)(?::(\d+))?/(.+)$");
+    RegExp exp = RegExp(r"^manta://((?:\w|\.)+)(?::(\d+))?/([^?]+)(\?(.+)?)?$");
     final matches = exp.allMatches(url);
     return matches.isEmpty ? null : matches.first;
   }
 
   MantaWallet._internal(
       {this.session_id,
+      this.confirmUrl,
       this.host = "localhost",
       this.port = MQTT_DEFAULT_PORT,
       mqtt.MqttClient mqtt_client = null,
@@ -80,6 +88,7 @@ class MantaWallet {
       }
       MantaWallet inst = MantaWallet._internal(
           session_id: match.group(3),
+          confirmUrl: MantaWallet.getUrlParam(url, "confirmUrl"),
           host: host,
           port: port,
           mqtt_client: mqtt_client,
