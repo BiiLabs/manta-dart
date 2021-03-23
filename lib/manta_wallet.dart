@@ -43,7 +43,8 @@ class MantaWallet {
   }
 
   static Match parseUrl(String url) {
-    RegExp exp = RegExp(r"^manta://((?:\w|\.)+)(?::(\d+))?/([^?]+)(\?(.+)?)?$");
+    RegExp exp =
+        RegExp(r"^manta://((?:\w|\.|-)+)(?::(\d+))?/([^?]+)(\?(.+)?)?$");
     final matches = exp.allMatches(url);
     return matches.isEmpty ? null : matches.first;
   }
